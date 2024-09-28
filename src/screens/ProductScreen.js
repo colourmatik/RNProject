@@ -1,18 +1,42 @@
-import React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import React, { useContext, useEffect } from "react";
+import { 
+  View, 
+  Text, 
+  FlatList, 
+  Image, 
+  Button, 
+  StyleSheet, 
+  TouchableOpacity 
+} from "react-native";
+import { ProductContext } from "../context/ProductContext";
+import { CartContext } from "../context/CartContext";
 
-export default function ProductScreen({ navigation }) {
+export default function ProductScreen() {
+  const { products, fetchProducts } = useContext(ProductContext);
+  const { addToCart } = useContext(CartContext);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const handleAddToCart = (product) => {
+    addToCart(product);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Информация о продукте</Text>
-      <Text style={styles.description}>
-        Это вся информация о продукте. Здесь вы можете добавить больше
-        информация о продукте, например, цена, описание и изображения.
-      </Text>
-      <Button
-        title="Добавить в корзину"
-        onPress={() => navigation.navigate("Cart")}
-        color="#556B2F"
+      <FlatList
+        data={products}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={2} 
+        renderItem={({ item }) => (
+          <View style={styles.productItem}>
+            <Image source={{ uri: item.image }} style={styles.productImage} />
+            <Text>{item.title}</Text>
+            <Text>${item.price}</Text>
+            <Button title="Добавить в корзину" onPress={() => handleAddToCart(item)} color='tomato'/>
+          </View>
+        )}
       />
     </View>
   );
@@ -21,21 +45,18 @@ export default function ProductScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f5f5f5",
-    padding: 20,
+    padding: 10,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#333",
+  productItem: {
+    flex: 1,
+    margin: 5,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
-  description: {
-    fontSize: 16,
-    color: "#666",
-    textAlign: "center",
-    marginBottom: 20,
+  productImage: {
+    width: "100%",
+    height: 150,
+    resizeMode: "cover",
   },
 });
