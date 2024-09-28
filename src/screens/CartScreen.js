@@ -11,6 +11,7 @@ export default function CartScreen({ navigation }) {
 
   const handleClearCart = () => {
     clearCart();
+    navigation.navigate('Order');
   };
 
   return (
@@ -37,7 +38,7 @@ export default function CartScreen({ navigation }) {
       )}
          <Text style={styles.totalText}>Итого: ${calculateTotal().toFixed(2)}</Text>
       {cartItems.length > 0 && (
-        <Button title="Очистить корзину" onPress={handleClearCart} color='tomato'/>
+        <Button title="Оформить заказ" onPress={handleClearCart} color='tomato'/>
       )}
     </View>
   );

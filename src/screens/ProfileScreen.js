@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { 
   View, 
   Text, 
@@ -11,10 +11,12 @@ import {
   Alert
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import ProfileContext from '../context/ProfileContext';
 
 export default function ProfileScreen() {
-  const [name, setName] = useState('Иван Иванов');
-  const [address, setAddress] = useState('ул. Примерная, д. 123');
+  const { profileData, setProfileData } = useContext(ProfileContext);
+  const [name, setName] = useState(profileData.name);
+  const [address, setAddress] = useState(profileData.address);
   const [profileImage, setProfileImage] = useState('https://via.placeholder.com/150');
 
   const [isEditingName, setIsEditingName] = useState(false);
@@ -50,6 +52,7 @@ export default function ProfileScreen() {
   const handleEditName = () => setIsEditingName(true);
   const handleSaveName = () => {
     setName(newNameInput);
+    setProfileData({ ...profileData, name: newNameInput });
     setIsEditingName(false);
   };
   const handleCancelName = () => setIsEditingName(false);
@@ -57,6 +60,7 @@ export default function ProfileScreen() {
   const handleEditAddress = () => setIsEditingAddress(true);
   const handleSaveAddress = () => {
     setAddress(newAddressInput);
+    setProfileData({ ...profileData, address: newAddressInput });
     setIsEditingAddress(false);
   };
   const handleCancelAddress = () => setIsEditingAddress(false);
