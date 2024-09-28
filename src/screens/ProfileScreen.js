@@ -7,7 +7,8 @@ import {
   StyleSheet, 
   TouchableOpacity,
   Modal,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
@@ -23,15 +24,26 @@ export default function ProfileScreen() {
   const [newAddressInput, setNewAddressInput] = useState(address);
 
   const handleChoosePhoto = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Ошибка', 'Нет разрешений на доступ к галерее.');
+      return;
+    }
 
-    if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setProfileImage(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.log('Ошибка при выборе фото:', error);
+      Alert.alert('Ошибка', 'Не удалось выбрать фото.');
     }
   };
 
@@ -61,7 +73,6 @@ export default function ProfileScreen() {
       <Text style={styles.address}>{address}</Text>
       <Button title="Изменить адрес" onPress={handleEditAddress} color='tomato'/>
 
-      {/* Модальное окно для изменения имени */}
       <Modal visible={isEditingName} animationType="slide">
         <View style={styles.modalContainer}>
           <TextInput

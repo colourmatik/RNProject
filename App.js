@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native'; // Импортируем TouchableOpacity
 import HomeScreen from './src/screens/HomeScreen';
 import ProductScreen from './src/screens/ProductScreen';
 import CartScreen from './src/screens/CartScreen';
@@ -65,7 +65,7 @@ export default function App() {
   return (
     <ProductProvider>
       <CartProvider>
-        <NavigationContainer>
+        <NavigationContainer onError={(error) => console.log('Ошибка навигации:', error)}>
           <Stack.Navigator initialRouteName="Home">
             <Stack.Screen 
               name="Home" 
