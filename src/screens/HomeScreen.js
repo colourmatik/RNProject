@@ -6,7 +6,8 @@ import {
   StyleSheet, 
   Platform, 
   ToastAndroid, 
-  Alert 
+  Alert,
+  Image 
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 
@@ -39,6 +40,7 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+     <Image source={require('../../assets/logo.png')} style={styles.logo} />
       <Text style={styles.title}>Добро пожаловать!</Text>
       <Button 
         title="Авторизация" 
@@ -60,5 +62,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+  },
+  logo: {
+    width: 200,
+    height: 220,
+    marginBottom: 20, 
   },
 });
